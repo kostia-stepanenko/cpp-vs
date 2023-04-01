@@ -6,7 +6,7 @@ using namespace std;
 
 int main()
 {
-
+    /*
     complex number(2, 3);
     complex conj = number.conjugate();
     cout << "The conjugate number is: " << conj << endl;
@@ -25,5 +25,8 @@ int main()
     cout << "mul: " << complex::multiply(first, second) << endl;
 
     cout << "div: " << complex::divide(first, second) << endl;
+    */
+
+    //todo:
 
 }

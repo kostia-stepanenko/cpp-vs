@@ -1,0 +1,6 @@
+﻿  lab4_ex3.cpp
+C:\Users\Shade\Desktop\workspace\cpp-vs\lab4_ex3\mystack1.h(3,1): warning C4005: 'NMAX': macro redefinition
+C:\Users\Shade\Desktop\workspace\cpp-vs\lab4_ex3\queue4.h(3,1): message : see previous definition of 'NMAX'
+  mystack1.cpp
+  Generating Code...
+  lab4_ex3.vcxproj -> C:\Users\Shade\Desktop\workspace\cpp-vs\lab4_ex3\x64\Debug\lab4_ex3.exe

@@ -1,0 +1,17 @@
+﻿  lab3.cpp
+C:\Users\Shade\Desktop\workspace\cpp-vs\lab3\lab3.cpp(29,24): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Shade\Desktop\workspace\cpp-vs\lab3\lab3.cpp(29,19): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Shade\Desktop\workspace\cpp-vs\lab3\lab3.cpp(16,19): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Shade\Desktop\workspace\cpp-vs\lab3\lab3.cpp(15,1): message : while compiling class template member function 'Point<float>::Point(int,int)'
+C:\Users\Shade\Desktop\workspace\cpp-vs\lab3\lab3.cpp(29,18): message : see reference to function template instantiation 'Point<float>::Point(int,int)' being compiled
+C:\Users\Shade\Desktop\workspace\cpp-vs\lab3\lab3.cpp(29,19): message : see reference to class template instantiation 'Point<float>' being compiled
+C:\Users\Shade\Desktop\workspace\cpp-vs\lab3\lab3.cpp(17,19): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+  lab3.vcxproj -> C:\Users\Shade\Desktop\workspace\cpp-vs\lab3\x64\Debug\lab3-task1.exe
