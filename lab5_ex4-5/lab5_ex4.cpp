@@ -110,15 +110,15 @@ int main()
 	cout << s << endl;
 	*/
 
-
+	/*
 	// reverse char array
 	char str[] = "hell";
 	reverse(str);
 
 	cout << str << endl;
+	*/
 
-	
-	/*
+
 	int length;
 
 	cout << "input array length: ";
@@ -136,7 +136,6 @@ int main()
 
 
 	delete[] arr;
-	*/
 
 	
 	return 0;
