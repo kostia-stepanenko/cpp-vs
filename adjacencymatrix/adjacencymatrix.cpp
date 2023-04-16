@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <queue>
 #include <iostream>
+#include <set>
 /// http://www.cplusplus.com/reference/queue/queue/
 
 using namespace std;
@@ -76,7 +77,7 @@ public:
     }
 };
 
-Graph<int, int> g(8);
+Graph<int, int> g(9);
 
 char* visited;
 
@@ -109,8 +110,84 @@ void bfs(int S) {
     }
 }
 
-int main() {
+set<int> red;
 
+set<int> black;
+
+bool containsInSet(int key, set<int> set) {
+    return set.find(key) != set.end();
+}
+
+void printSet(set<int> s) {
+    for (auto it = s.begin(); it != s.end(); ++it) {
+        cout << *it << ", ";
+    }
+    cout << endl;
+}
+
+bool bip(int start) {
+    std::queue<int> queue;
+
+    red.insert(start);
+    queue.push(start);
+
+    while (!queue.empty()) {
+
+        int cur = queue.front();
+        queue.pop(); ///dequeue
+
+        int curColor;
+        if (containsInSet(cur, red)) {
+            curColor = 0; // RED
+        }
+        else {
+            curColor = 1; // BLACK
+        }
+
+        
+        for (int other = 0; other < g.N; ++other) {
+
+            int edgeVal = g.A[cur][other];
+
+            if (g.A[cur][other]) {
+
+                if (containsInSet(other, red)) {
+                    if (curColor == 0) {
+                        return false;
+                    }
+                }
+                else if (containsInSet(other, black)) {
+                    if (curColor == 1) {
+                        return false;
+                    }
+                }
+                else {
+                    // not colored yet node
+
+                    queue.push(other);
+
+                    int otherColor = (curColor + 1) % 2;
+
+                    if (otherColor == 0) {
+                        red.insert(other);
+                    }
+                    else {
+                        black.insert(other);
+                    }
+                    
+                }
+
+            }
+        }
+    }
+
+    return true;
+}
+
+
+
+int main() {
+    /*
     visited = new char[g.N];
     for (int i = 0; i < g.N; i++) {
         visited[i] = 0;
@@ -131,6 +208,34 @@ int main() {
     //bfs(4);
 
     delete[] visited;
+    */
+
+    // add edges
+    g.addEdge(0, 1);
+    g.addEdge(0, 2);
+    g.addEdge(3, 4);
+    g.addEdge(4, 5);
+    g.addEdge(6, 4);
+    g.addEdge(1, 3);
+    g.addEdge(4, 7);
+    g.addEdge(6, 8);
+    g.addEdge(3, 2);
+    g.addEdge(7, 8);
+   // g.addEdge(3, 6);
+    
+  
+
+    bool isBip = bip(0);
+
+    if (isBip) {
+        cout << "bipartite" << endl;
+        // todo: output red, black
+        printSet(red);
+        printSet(black);
+    }
+    else {
+        cout << "Not bipartite" << endl;
+    }
 
     return 0;
 }
