@@ -77,7 +77,7 @@ public:
     }
 };
 
-Graph<int, int> g(9);
+Graph<int, int> g(6);
 
 char* visited;
 
@@ -184,15 +184,42 @@ bool bip(int start) {
     return true;
 }
 
+bool isConnected(int startNode) {
+    int count=0;
+    std::queue<int> Q;
+    int x, y;
 
+    Q.push(startNode);
+    ++count;
+    visited[startNode] = 1;
+
+    while (!Q.empty()) {
+        x = Q.front();
+        Q.pop(); ///dequeue
+        for (y = 0; y < g.N; y++)
+            if (g.A[x][y] && !visited[y]) {
+                visited[y] = 1;
+                Q.push(y);
+                count++;
+            }
+       
+    }
+    if (count == g.N) {
+        return true;
+    }
+    else {  
+        return false;
+    }
+
+}
 
 int main() {
-    /*
+    
     visited = new char[g.N];
     for (int i = 0; i < g.N; i++) {
         visited[i] = 0;
     }
-
+    /*
     // add edges
     g.addEdge(4, 0),
     g.addEdge(4, 2),
@@ -208,7 +235,7 @@ int main() {
     //bfs(4);
 
     delete[] visited;
-    */
+  
 
     // add edges
     g.addEdge(0, 1);
@@ -222,9 +249,22 @@ int main() {
     g.addEdge(3, 2);
     g.addEdge(7, 8);
    // g.addEdge(3, 6);
-    
+      */
   
 
+
+    g.addEdge(0, 1);
+    g.addEdge(1, 2);
+    g.addEdge(2, 3);
+    g.addEdge(5, 4);
+
+    if (isConnected(0)) {
+        cout << "Graph is connected" << endl;
+    }
+    else {
+        cout<< "Graph is NOT connected" << endl;
+    }
+/*
     bool isBip = bip(0);
 
     if (isBip) {
@@ -236,7 +276,7 @@ int main() {
     else {
         cout << "Not bipartite" << endl;
     }
-
+    */
     return 0;
 }
 
