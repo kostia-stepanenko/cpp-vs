@@ -1,0 +1,6 @@
+﻿  heap-home.cpp
+C:\Users\Shade\Desktop\workspace\cpp-vs\heap-home\heap-home.cpp(22,20): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\Shade\Desktop\workspace\cpp-vs\heap-home\heap-home.cpp(16,1): message : while compiling class template member function 'void MaxHeap<int>::fixUp(int)'
+C:\Users\Shade\Desktop\workspace\cpp-vs\heap-home\heap-home.cpp(74,14): message : see reference to function template instantiation 'void MaxHeap<int>::fixUp(int)' being compiled
+C:\Users\Shade\Desktop\workspace\cpp-vs\heap-home\heap-home.cpp(107,18): message : see reference to class template instantiation 'MaxHeap<int>' being compiled
+  heap-home.vcxproj -> C:\Users\Shade\Desktop\workspace\cpp-vs\heap-home\x64\Debug\heap-home.exe
