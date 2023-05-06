@@ -4,15 +4,17 @@
 #include <iostream>
 #include <list>
 #include <stack>
+#include <string>
+#include <sstream>
 
 using namespace std;
 
-template <size_t size> void  printMatrix(int(&m)[size][size]) {
-    for (int i = 0; i < size; i++)
+void  printMatrix(int** m, size_t size) {
+    for (int row = 0; row < size; row++)
     {
-        for (int j = 0; j < size; j++)
+        for (int col = 0; col < size; col++)
         {
-            cout << m[i][j] << ", ";
+            cout << m[row][col] << ", ";
         }
         cout << "\n";
     }
@@ -28,10 +30,11 @@ template<typename T> void showList(list<T> myList) {
 /*
 * Use Depth First Search for each connected component to find all vertexes without OUT edges.
 */
-template <size_t size> list<int> findVertexesWithoutOutputEdges(int(&m)[size][size]) {
+list<int> findVertexesWithoutOutputEdges(int** m, int size) {
     list<int> candidates;
 
-    bool visitedVertexes[size] = {false};
+    bool* visitedVertexes = new bool[size];
+    memset(visitedVertexes, false, sizeof(bool) * size); // set all value to 'false'
 
     for (int startVer = 0; startVer < size; ++startVer) {
 
@@ -69,17 +72,19 @@ template <size_t size> list<int> findVertexesWithoutOutputEdges(int(&m)[size][si
         }
     }
 
+    delete[] visitedVertexes;
+
     return candidates;
 }
 
-template <size_t size> int findHomerId(int(&m)[size][size]) {
+int findHomerId(int** m, int size) {
 
     if (size == 1) {
         // assume that one element matrix always have Homer
         return 0;
     }
 
-    list<int> candidates = findVertexesWithoutOutputEdges<size>(m);
+    list<int> candidates = findVertexesWithoutOutputEdges(m, size);
 
     //cout << "Found candidates: " << endl;
     //showList(candidates);
@@ -107,12 +112,26 @@ template <size_t size> int findHomerId(int(&m)[size][size]) {
     }
 }
 
+list<string> tokenize(string str, char delimiter){
+
+    size_t start;
+    size_t end = 0;
+
+    list<string> tokens;
+
+    while ((start = str.find_first_not_of(delimiter, end)) != string::npos){
+        end = str.find(delimiter, start);
+        tokens.push_back(str.substr(start, end - start));
+    }
+
+    return tokens;
+}
+
 int main()
 {
-    const int size = 6;
-
-    //row fill first, then second
     /*
+    const int size = 6;
+    
     // present 
     int m[size][size] =
     {
@@ -144,8 +163,8 @@ int main()
       {0, 0, 1, 1, 0, 1},
       {0, 0, 0, 1, 0, 0},
     };
-    */
 
+    
     int m[size][size] =
     {
       {0, 0, 1, 1, 0, 1},
@@ -155,17 +174,72 @@ int main()
       {0, 0, 1, 1, 0, 1},
       {0, 0, 0, 1, 0, 0},
     };
+    */
 
+    try {
+        cout << "Input matrix size: ";
+        int matrixSize;
+        cin >> matrixSize;
 
-    //printMatrix<size>(m);
+        if (matrixSize <= 0 || matrixSize > 100) {
+            throw invalid_argument("matrix size should be positive value less than 100");
+        }
 
-    int homerId = findHomerId<size>(m);
+        int** matrix = new int*[matrixSize];
 
-    if (homerId == -1) {
-        cout << "Homer is not present" << endl;
+        cout << "Row format example: 1,0,1,0" << endl;
+
+        for (int i = 0; i < matrixSize; i++) {
+
+            cout << "row[" << i << "]: " << flush;
+
+            string line;
+            cin >> line;
+
+            list<string> tokens = tokenize(line, ',');
+
+            if (tokens.size() != matrixSize) {
+                throw invalid_argument("row size is incorrect");
+            }
+
+            matrix[i] = new int[matrixSize]; // allocate single row
+
+            list<string>::iterator it = tokens.begin();
+
+            for (int col = 0; col < matrixSize && it != tokens.end(); ++col, ++it) {
+
+                int slotValue = stoi(*it);
+
+                if (slotValue != 0 && slotValue != 1) {
+                    throw invalid_argument("incorrect value inside matrix, should be 0 or 1");
+                }
+
+                matrix[i][col] = slotValue;
+            }
+        }
+
+        //printMatrix(matrix, matrixSize);
+
+        int homerId = findHomerId(matrix, matrixSize);
+
+        if (homerId == -1) {
+            cout << "Homer is not present" << endl;
+        }
+        else {
+            cout << "Homer is the person with id " << homerId << endl;
+        }
+
+        for (int i = 0; i < matrixSize; ++i) {
+            delete[] matrix[i];
+        }
+
+        delete[] matrix;
     }
-    else {
-        cout << "Homer is the person with id " << homerId << endl;
+    catch (const exception& ex) {
+        cerr << ex.what() << endl;
+    }
+    catch (...) {
+        cerr << "Some unknown exception" << endl;
     }
    
     cout << "homework 1 stack done" << endl;
