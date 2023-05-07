@@ -24,3 +24,8 @@ Term class stores single polynomial term, something like `23.45 * X^5`
 ## Input
 
 Polynom value is read from `in.txt` file.
+
+First row is number of polynomials;
+Second and third one are terms of two polynomials with  " " between them;
+
+
