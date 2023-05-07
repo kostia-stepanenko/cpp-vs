@@ -54,7 +54,6 @@ public:
     }
 };
 
-
 class Polynomial {
 private:
     list<Term> terms;
@@ -178,6 +177,7 @@ public:
 
 int main(){
 
+    /*
     Polynomial p1;
     p1.addTerm(Term(3, 3));
     p1.addTerm(Term(2, 2));
@@ -203,6 +203,7 @@ int main(){
     Polynomial prodRes = p1.mul(p2);
 
     cout << "p1 * p2: " << prodRes << endl;
+    */
 
     cout << "homework 3 polinoms as list done" << endl;
 
