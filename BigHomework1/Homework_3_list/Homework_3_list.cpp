@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <list>
+#include <complex>
 
 using namespace std;
 
@@ -85,6 +86,18 @@ public:
 
         while (firstIt != this->terms.end() || secondIt != second.terms.end()) {
 
+            if (firstIt == this->terms.end()) {
+                res.addTerm(Term(*secondIt));
+                ++secondIt;
+                continue;
+            }
+
+            if (secondIt == second.terms.end()) {
+                res.addTerm(Term(*firstIt));
+                ++firstIt;
+                continue;
+            }
+
             // exp1 == exp2
             if (firstIt->getExp() == secondIt->getExp()) {
 
@@ -112,8 +125,27 @@ public:
         return res;
     }
 
+    Polynomial mulByTerm(const Term& termToMul)  {
+        Polynomial res;
+
+        for (const Term& cur : this->terms) {
+            double newCoeff = termToMul.getCoeff() * cur.getCoeff();
+            int newExp = termToMul.getExp() + cur.getExp();
+
+            res.addTerm(Term(newCoeff, newExp));
+        }
+
+        return res;
+    }
+
+
     Polynomial mul(Polynomial& second) {
         Polynomial res;
+
+        for (const Term& secondTerm : second.terms) {
+            Polynomial partialRes = this->mulByTerm(secondTerm);
+            res = res.sum(partialRes);
+        }
 
         return res;
     }
@@ -147,21 +179,21 @@ public:
 int main(){
 
     Polynomial p1;
-    p1.addTerm(Term(-3.15, 5));
-    p1.addTerm(Term(12, 4));
-    p1.addTerm(Term(0, 2));
-    p1.addTerm(Term(-18, 1));
-    p1.addTerm(Term(13, 0));
+    p1.addTerm(Term(3, 3));
+    p1.addTerm(Term(2, 2));
+    p1.addTerm(Term(6, 1));
+    p1.addTerm(Term(5, 0));
+    
 
     cout << "p1: " << p1 << endl;
 
     cout << "p(X) = " << p1.evaluate(12.34) << endl;
 
     Polynomial p2;
-    p2.addTerm(Term(14.56, 8));
-    p2.addTerm(Term(10, 4));
-    p2.addTerm(Term(13, 1));
-    p2.addTerm(Term(17, 0));
+    p2.addTerm(Term(1, 4));
+    p2.addTerm(Term(1, 2));
+    p2.addTerm(Term(3, 1));
+    p2.addTerm(Term(2, 0));
 
     Polynomial sumRes = p1.sum(p2);
 
