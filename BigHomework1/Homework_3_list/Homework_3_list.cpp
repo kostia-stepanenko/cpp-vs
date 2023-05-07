@@ -3,7 +3,9 @@
 #include <iostream>
 #include <cstdlib>
 #include <list>
-#include <complex>
+#include <fstream>
+#include <sstream>
+#include <string>
 
 using namespace std;
 
@@ -61,6 +63,38 @@ private:
 public:
 
     Polynomial() {}
+
+    Polynomial(string str) {
+
+        // 3.24*x^3 2*x^2 6*x^1 5
+        stringstream ss(str);
+        string termStr;
+
+        while (ss >> termStr) {
+
+            // parse single term, like '3.24*x^3'
+            double coeffVal;
+            int expVal = 0;
+
+            size_t coeffDelimiter = termStr.find('*');
+
+            // single term as '13'
+            if (coeffDelimiter == string::npos) {
+                coeffVal = stod(termStr.c_str());
+            }
+            else {
+                coeffVal = stod(termStr.substr(0, coeffDelimiter).c_str());   
+
+                size_t expDelimiter = termStr.find('^');
+
+                if (expDelimiter != string::npos) {
+                    expVal = atoi(termStr.substr(expDelimiter+1).c_str());
+                }
+            }
+
+            this->addTerm(Term(coeffVal, expVal));
+        }
+    }
 
     void addTerm(Term newTerm) {
         this->terms.push_back(newTerm);
@@ -204,6 +238,45 @@ int main(){
 
     cout << "p1 * p2: " << prodRes << endl;
     */
+
+    ifstream inFile;
+    inFile.open("in.txt");
+
+    if (inFile.is_open()) {
+
+        string line;
+        getline(inFile, line);
+
+        int cnt = atoi(line.c_str());
+
+        Polynomial* arr = new Polynomial[cnt];
+
+        for (int i = 0; i < cnt; ++i) {
+            string polStr;
+            getline(inFile, polStr);
+            arr[i] = Polynomial(polStr);
+        }
+
+        cout << "p1: " << arr[0] << endl;
+        cout << "p2: " << arr[1] << endl;
+        cout << endl;
+
+        double x = 12.33;
+        cout << "p1("<< x << ") = " << arr[0].evaluate(x) << endl;
+        cout << endl;
+
+        cout << "p1 + p2 = " << arr[0].sum(arr[1]) << endl;
+        cout << endl;
+
+        cout << "p1 * p2 = " << arr[0].mul(arr[1]) << endl;
+        cout << endl;
+
+        delete[] arr;
+        inFile.close();
+    }
+    else {
+        cerr << "Can't open file" << endl;
+    }
 
     cout << "homework 3 polinoms as list done" << endl;
 
