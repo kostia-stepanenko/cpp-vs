@@ -7,12 +7,22 @@
 #include <map>
 #include <set>
 #include <algorithm>
+#include <exception>
 
 using namespace std;
 
 class DirectedGraph {
 private:
 	map<char, set<char>> adjList;
+
+	/*
+	a => {d, n}
+	n => {d, o}
+	i => {a}
+	o => {d}
+	d => {}
+
+	*/
 
 public:
 
@@ -47,13 +57,13 @@ public:
 
 	friend ostream& operator<<(ostream& os,  const DirectedGraph& g) {
 		for (const auto verPair : g.adjList) {
-			cout << verPair.first << " => "; 
+			cout << verPair.first << " => { "; 
 
 			for (const auto destVer : verPair.second) {
 				cout << destVer << ", ";
 			}
 
-			cout << endl;
+			cout << " } " << endl;
 		}
 		return os;
 	}
@@ -85,7 +95,7 @@ bool hasSamePrefix(string first, string second, int prefixLength) {
 	return true;
 }
 
-DirectedGraph buildDepeencyGraph(vector<string> words) {
+DirectedGraph buildDependencyGraph(vector<string> words) {
 
 	size_t maxLength = findMaxWordLength(words);
 
@@ -157,7 +167,9 @@ vector<char> topoligicalOrder(DirectedGraph g) {
 		}
 	}
 
-	//reverse(res.begin(), res.end());
+	if (res.size() != g.getVertexes().size()) {
+		throw invalid_argument("Invalid Graph, can't complete topological sorting");
+	}
 
 	return res;
 }
@@ -173,30 +185,34 @@ string toString(vector<char> res) {
 	return str;
 }
 
-
 int main(){
 
-	vector<string> words;
+	try {
+		vector<string> words; // = readWordsFromFile();
 
-	words.push_back("ion");
-	words.push_back("ana");
-	words.push_back("adonia");
-	words.push_back("doina");
-	words.push_back("doinn");
-	words.push_back("ddan");
-	words.push_back("ddao");
+		words.push_back("ion");
+		words.push_back("ana");
+		words.push_back("adonia");
+		words.push_back("doina");
+		words.push_back("doinn");
+		words.push_back("ddan");
+		words.push_back("ddao");
 
-	DirectedGraph graph = buildDepeencyGraph(words);
+		DirectedGraph graph = buildDependencyGraph(words);
 
-	cout << " ======================  Graph of chars ====================== " << endl;
-	cout << graph << endl;
-	cout << " ============================================================= " << endl;
-	
-	vector<char> topologicalOrderRes = topoligicalOrder(graph);
+		cout << " ======================  Graph of chars ====================== " << endl;
+		cout << graph << endl;
+		cout << " ============================================================= " << endl << endl;
 
-	string outIndex = toString(topologicalOrderRes);
+		vector<char> topologicalOrderRes = topoligicalOrder(graph);
 
-	cout << "OUT index: " << outIndex << endl;
+		string outIndex = toString(topologicalOrderRes);
 
-	cout << "homework 2 graphs completed" << endl;
+		cout << "OUT index: " << outIndex << endl << endl;
+
+		cout << "homework 2 graphs completed" << endl;
+	}
+	catch (const exception& ex) {
+		cerr << ex.what() << endl;
+	}
 }
