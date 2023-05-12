@@ -1,10 +1,13 @@
 # Description
 
-## Read input
-Read all words from inpit file till there is "." string detected.
+## Read from file
+Read all words from inpit file 'index.in' till there is "." string detected using 'readWordsFromFile' function.
 Store all words in vector DS for processing.
 If we have more than 50 words or if single word length is greater than 10 we will
 throw 'invalid_argument' exception.
+
+## Write to file
+Index value will be written as single string value to file 'index.out' using 'writeToFile' function.
 
 ## Graph
 Directed graph will be represented as adjacency list using 'DirectedGraph' class.

@@ -1,6 +1,8 @@
 
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <string>
 #include <vector>
 #include <queue>
@@ -185,11 +187,48 @@ string toString(vector<char> res) {
 	return str;
 }
 
+
+vector<string> readWordsFromFile(string fileName) {
+	vector<string> words;
+
+	ifstream inFile(fileName);
+
+	int lineIndex = 0;
+	string line;
+	while (getline(inFile, line)) {
+		if (line == ".") {
+			break;
+		}
+
+		if (line.length() > 10) {
+			throw invalid_argument("line is longer than 10 characters");
+		}
+		if (lineIndex > 50) {
+			throw invalid_argument("more than 50 words detected");
+		}
+
+		words.push_back(line);
+		++lineIndex;
+	}
+
+	return words;
+}
+
+void writeToFile(string fileName, string valueToWrite) {
+
+	ofstream outFile(fileName);
+
+	if (outFile.is_open()) {
+		outFile << valueToWrite << endl;
+		outFile.close();
+	}
+}
+
 int main(){
 
 	try {
-		vector<string> words; // = readWordsFromFile();
-
+		vector<string> words = readWordsFromFile("index.in");
+		/*
 		words.push_back("ion");
 		words.push_back("ana");
 		words.push_back("adonia");
@@ -197,6 +236,7 @@ int main(){
 		words.push_back("doinn");
 		words.push_back("ddan");
 		words.push_back("ddao");
+		*/
 
 		DirectedGraph graph = buildDependencyGraph(words);
 
@@ -209,6 +249,10 @@ int main(){
 		string outIndex = toString(topologicalOrderRes);
 
 		cout << "OUT index: " << outIndex << endl << endl;
+
+		cout << "Saving index into file" << endl;
+		writeToFile("index.out", outIndex);
+		cout << "Index saved" << endl;
 
 		cout << "homework 2 graphs completed" << endl;
 	}
