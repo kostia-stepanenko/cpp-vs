@@ -1,0 +1,6 @@
+﻿  lab9.cpp
+C:\Users\Shade\Desktop\workspace\cpp-vs\lab9\lab9.cpp(275,37): error C2065: 'i': undeclared identifier
+C:\Users\Shade\Desktop\workspace\cpp-vs\lab9\lab9.cpp(280,2): message : see reference to class template instantiation 'BinaryTree<T>' being compiled
+C:\Users\Shade\Desktop\workspace\cpp-vs\lab9\lab9.cpp(275,43): error C3878: syntax error: unexpected token ',' following 'condition'
+C:\Users\Shade\Desktop\workspace\cpp-vs\lab9\lab9.cpp(275,43): message : missing one of:  ')' ';' ?
+C:\Users\Shade\Desktop\workspace\cpp-vs\lab9\lab9.cpp(275,43): message : error recovery skipped: ','
