@@ -14,6 +14,21 @@ private:
 	map<char, set<char>> adjList;
 
 public:
+
+	set<char> getAdjVertexes(char ver) {
+		return adjList.find(ver) -> second;
+	}
+
+	vector<char> getVertexes() {
+		vector<char> res;
+
+		for (const auto val : adjList) {
+			res.push_back(val.first);
+		}
+
+		return res;
+	}
+
 	void addEdge(char from, char to) {
 
 		// 'from' vertex not found, insert
@@ -102,6 +117,42 @@ DirectedGraph buildDepeencyGraph(vector<string> words) {
 
 }
 
+vector<char> topoligicalOrder(DirectedGraph g) {
+	vector<char> res;
+
+	// track IN degree for each vertex
+	map<char, int> inDegree;
+
+	// set all IN degree values to 0
+	for (const auto ver : g.getVertexes()) {
+		inDegree.insert({ver, 0});
+	}
+
+	// calculate IN degree for every vertex using Graph
+	//for (const auto ver : g.getVertexes()) {
+	//	for (const adjVer : g.getAdjVertexes(ver)) {
+			//int prevInDegree = inDegree.find(adjVer)->second;
+	//	}
+	//}
+
+
+	// TODO:
+
+	reverse(res.begin(), res.end());
+
+	return res;
+}
+
+string toString(vector<char> res) {
+
+	string str;
+
+	for (const auto val : res) {
+		str += val;
+	}
+
+	return str;
+}
 
 
 int main(){
@@ -122,6 +173,11 @@ int main(){
 	cout << graph << endl;
 	cout << " ============================================================= " << endl;
 	
+	vector<char> topologicalOrderRes = topoligicalOrder(graph);
+
+	string outIndex = toString(topologicalOrderRes);
+
+	cout << "OUT index: " << outIndex << endl;
 
 	cout << "homework 2 graphs completed" << endl;
 }
