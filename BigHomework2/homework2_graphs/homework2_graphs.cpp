@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <queue>
 #include <map>
 #include <set>
 #include <algorithm>
@@ -129,16 +130,34 @@ vector<char> topoligicalOrder(DirectedGraph g) {
 	}
 
 	// calculate IN degree for every vertex using Graph
-	//for (const auto ver : g.getVertexes()) {
-	//	for (const adjVer : g.getAdjVertexes(ver)) {
-			//int prevInDegree = inDegree.find(adjVer)->second;
-	//	}
-	//}
+	for (const auto ver : g.getVertexes()) {
+		for (const auto adjVer : g.getAdjVertexes(ver)) {
+			inDegree.find(adjVer)->second += 1;
+		}
+	}
+	queue<char> vertexesForProcessing;
 
+	for (const auto baseVer : inDegree) {
+		if (baseVer.second == 0) {
+			vertexesForProcessing.push(baseVer.first);
+		}
+	}
 
-	// TODO:
+	while (! vertexesForProcessing.empty()) {
+		char curVer = vertexesForProcessing.front();
+		vertexesForProcessing.pop();
 
-	reverse(res.begin(), res.end());
+		res.push_back(curVer);
+
+		for (const auto adjVer : g.getAdjVertexes(curVer)) {
+			inDegree.find(adjVer)->second -= 1;
+			if (inDegree.find(adjVer)->second == 0) {
+				vertexesForProcessing.push(adjVer);
+			}
+		}
+	}
+
+	//reverse(res.begin(), res.end());
 
 	return res;
 }
