@@ -206,24 +206,60 @@ public:
 		freeNodeRec(root);
 	}
 
+	static string toStringRec(Node* cur) {
+
+		if (cur == NULL) {
+			return "";
+		}
+
+		string res(cur->colorAsStr() + ", ");
+
+		for (const auto child : cur->children) {
+			res += toStringRec(child) + ", ";
+		}
+
+		return res;
+	};
+
+	friend ostream& operator<<(std::ostream& os, const QuadTree& tree) {
+		os << "[" << toStringRec(tree.root) << "]";
+		return os;
+	}
+
 };
-
-
 
 int main(){
 
 	try {
-		string preOrderStr1 = "ppwwwbpbbwwbw";
-		QuadTree tree1(preOrderStr1);
-		cout << "tree1 black pixels count: " << tree1.countBlackPixels() << endl;
 
-		string preOrderStr2 = "pwbwpwwbw";
-		QuadTree tree2(preOrderStr2);
-		cout << "tree2 black pixels count: " << tree2.countBlackPixels() << endl;
+		while (true) {
+			string preOrderStr1;
+			cout << "Input first tree: ";
+			cin >> preOrderStr1;
+			QuadTree tree1(preOrderStr1);
+			cout << "tree1 black pixels count: " << tree1.countBlackPixels() << endl;
+			cout << "=========================================================" << endl;
 
-		QuadTree mergedTree(tree1, tree2);
-		cout << "mergedTree black pixels count: " << mergedTree.countBlackPixels() << endl;
+			string preOrderStr2;
+			cout << "Input second tree: ";
+			cin >> preOrderStr2;
+			QuadTree tree2(preOrderStr2);
+			cout << "tree2 black pixels count: " << tree2.countBlackPixels() << endl;
+			cout << "=========================================================" << endl;
 
+			cout << "Merging tree 1 and 2" << endl;
+			QuadTree mergedTree(tree1, tree2);
+			cout << "mergedTree: " << mergedTree << endl;
+			cout << "mergedTree black pixels count: " << mergedTree.countBlackPixels() << endl;
+			cout << "=========================================================" << endl;
+
+			cout << "Do you want to proceed (Y/N)?: ";
+			string proceedAnswer;
+			cin >> proceedAnswer;
+			if (proceedAnswer == "N") {
+				break;
+			}
+		}
 	}
 	catch (const exception& ex) {
 		cerr << ex.what() << endl;
