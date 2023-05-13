@@ -1,5 +1,5 @@
 #include <iostream>
-#include <list>
+#include <vector>
 #include <stack>
 #include <stdexcept> 
 
@@ -19,7 +19,7 @@ Color toColor(char chColor) {
 class Node {
 public:
 	Color color;
-	list<Node*> children;
+	vector<Node*> children;
 
 	string colorAsStr() {
 		switch (this->color){
@@ -27,6 +27,13 @@ public:
 			case black: return "black";
 			default: return "gray";
 		}
+	}
+
+	Node* getChildByIndexOrNull(int index) {
+		if (index >= 0 && index < this->children.size()) {
+			return this->children[index];
+		}
+		return NULL;
 	}
 
 	Node(Color initialColor) {
@@ -78,9 +85,75 @@ private:
 		return 0;
 	}
 
+	Node* mergeRec(Node* firstNode, Node* secondNode) {
+		// nothing left to traverse, so just return
+		if (firstNode == NULL && secondNode == NULL) {
+			return NULL;
+		}
+
+		// first tree completed, so just traverse second
+		if (firstNode == NULL) {
+			Node* cur = new Node(secondNode->color);
+
+			for (const auto secondChild : secondNode->children) {
+				Node* child = mergeRec(NULL, secondChild);
+				if (child != NULL) {
+					cur->children.push_back(child);
+				}
+			}
+
+			return cur;
+		}
+
+		// second tree completed, so just traverse first
+		if (secondNode == NULL) {
+			Node* cur = new Node(firstNode->color);
+
+			for (const auto firstChild : firstNode->children) {
+				Node* child = mergeRec(firstChild, NULL);
+				if (child != NULL) {
+					cur->children.push_back(child);
+				}
+			}
+
+			return cur;
+		}
+
+		// firstNode is BLACK OR secondNode is BLACK, return BLACK
+		if (firstNode->color == black || secondNode->color == black) {
+			return new Node(black);
+		}
+
+		// both nodes are WHITE, just return white
+		if (firstNode->color == white && secondNode->color == white) {
+			return new Node(white);
+		}
+
+		// at least one node is GRAY, mark current node as GRAY 
+		// and merge all children nodes
+		Node* cur = new Node(gray);
+
+		for (int i = 0; i < 4; ++i) {
+			Node* child1 = firstNode->getChildByIndexOrNull(i);
+			Node* child2 = secondNode->getChildByIndexOrNull(i);
+			if (child1 == NULL && child2 == NULL) {
+				break;
+			}
+
+			cur->children.push_back(mergeRec(child1, child2));
+		}
+
+
+		return cur;
+	}
+
 public:
-	QuadTree() {
-		this->root = NULL;
+
+	/*
+	* Merge two Quad trees into one
+	*/
+	QuadTree(const QuadTree& first, const QuadTree& second) {
+		root = mergeRec(first.root, second.root);
 	}
 
 	/*
@@ -129,22 +202,13 @@ public:
 	}
 
 	~QuadTree() {
+		//cout << "QuadTree destructor called" << endl;
 		freeNodeRec(root);
 	}
 
-
-	friend QuadTree mergeTrees(QuadTree first, QuadTree second);
-
 };
 
-/*
-* Merge two Quad trees into one
-*/
-QuadTree mergeTrees(QuadTree first, QuadTree second) {
-	QuadTree mergedTree;
-	//TODO: merge two quad trees
-	return mergedTree;
-}
+
 
 int main(){
 
@@ -157,8 +221,9 @@ int main(){
 		QuadTree tree2(preOrderStr2);
 		cout << "tree2 black pixels count: " << tree2.countBlackPixels() << endl;
 
-		//QuadTree mergedTree = mergeTrees(tree1, tree2);
-		//cout << "mergedTree black pixels count: " << mergedTree.countBlackPixels() << endl;
+		QuadTree mergedTree(tree1, tree2);
+		cout << "mergedTree black pixels count: " << mergedTree.countBlackPixels() << endl;
+
 	}
 	catch (const exception& ex) {
 		cerr << ex.what() << endl;
